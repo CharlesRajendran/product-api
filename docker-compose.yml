@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    container_name: 'product_db'
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: productdb
+    ports:
+        - '4306:3306'
+    volumes:
+      - ./data/db:/data/db
+
+  cache:
+    container_name: 'product_redis'
+    image: redis:latest
+    ports:
+        - '6379:6379'
+
+  api:
+    container_name: product-list-api
+    image: product-list-api
+    environment:
+      REDIS_HOST: cache
+      NODE_ENV: development
+    restart: always
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app 
+    depends_on:
+      - db
+      - cache
+

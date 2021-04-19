@@ -1,0 +1,61 @@
+{
+  "name": "product-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "launch": "docker-compose up",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage",
+    "migrate": "node_modules/.bin/sequelize db:migrate",
+    "migrate-and-start": "npm run migrate && npm start",
+    "release": "standard-version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "dependencies": {
+    "@hapi/boom": "^9.1.2",
+    "cookie-parser": "~1.4.5",
+    "debug": "~4.3.1",
+    "express": "~4.17.1",
+    "express-rate-limit": "^5.2.6",
+    "faker": "^5.5.3",
+    "helmet": "^4.5.0",
+    "hpp": "^0.2.3",
+    "joi": "^17.4.0",
+    "mysql2": "^2.2.5",
+    "redis": "^3.1.1",
+    "sequelize": "^6.6.2",
+    "slugify": "^1.5.0",
+    "swagger-jsdoc": "6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "winston": "^3.3.3",
+    "winston-aws-cloudwatch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-node": "^11.1.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "jest-cli": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "sequelize-cli": "^6.2.0",
+    "standard-version": "^9.2.0"
+  }
+}
