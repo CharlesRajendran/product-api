@@ -1,0 +1,10 @@
+{
+  "*.js": [
+    "prettier --single-quote --write",
+    "eslint --fix",
+    "git add ."
+  ],
+  "*": [
+    "npm test"
+  ]
+}
