@@ -5,10 +5,11 @@ const cookieParser = require('cookie-parser');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 
-const cacheMW = require('./middlewares/cacheHit');
+const cacheMW = require('./middlewares/checkCacheHit');
 
 const indexRouter = require('./routes/index');
 const ErrorHelper = require('./utilities/errorHelper');
+const Logger = require('./utilities/loggingHelper');
 
 const app = express();
 

@@ -57,19 +57,12 @@ function Logger(environment) {
   }
 }
 
-async function waitForLoggerToFinish(logger) {
-  const loggerDone = new Promise((resolve) => logger.on('finish', resolve));
-  logger.end();
-  return loggerDone;
-}
-
 Logger.prototype.log = async function log(level, message) {
   if (typeof message === 'object') {
     this.logger.log(level, { message: JSON.stringify(message) });
   } else {
     this.logger.log(level, { message });
   }
-  await waitForLoggerToFinish(this.logger);
 };
 
 module.exports = new Logger(process.env.NODE_ENV || 'development');
