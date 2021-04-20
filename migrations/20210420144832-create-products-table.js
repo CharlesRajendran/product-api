@@ -24,11 +24,11 @@ module.exports = {
         unique: true
       },
       brand: {
-        type: Sequelize.STRING(12),
+        type: Sequelize.STRING(100),
         allowNull: false
       },
       image: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING(1000)
       },
       unit: {
         type: Sequelize.STRING(20)

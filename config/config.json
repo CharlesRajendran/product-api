@@ -2,7 +2,7 @@
     "development": {
         "username": "root",
         "password": "root",
-        "database": "productdb",
+        "database": "product-api-db",
         "host": "db",
         "dialect": "mysql"
     }

@@ -1,5 +1,6 @@
 const ErrorHelper = require('./utilities/errorHelper');
 const logger = require('./utilities/loggingHelper');
+const { updateCache } = require('./utilities/cacheHelper');
 
 /**
  * @description Default error response for API requests
@@ -34,7 +35,14 @@ const defaultReject = async (error, response) => {
  * @returns Resolved Response with Data
  */
 const defaultResolve = async (response, data) => {
-  response.status(200).json(data);
+  // destructure cacheKey from response
+  const { cacheKey, ...payload } = data;
+  response.status(200).json(payload);
+
+  // updateCache
+  if (cacheKey) {
+    await updateCache(cacheKey, JSON.stringify(payload));
+  }
 };
 
 const controller = async (req, res, params) => {

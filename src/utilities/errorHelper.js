@@ -31,6 +31,8 @@ const ErrorHelper = (error) => {
       return Boom.unsupportedMediaType(error.message).output;
     case 422:
       return Boom.badData(error.message).output;
+    case 429:
+      return Boom.tooManyRequests(error.message).output;
     default:
       return Boom.badImplementation('Un known error').output;
   }

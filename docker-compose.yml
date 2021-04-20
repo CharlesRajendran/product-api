@@ -5,7 +5,9 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_DATABASE: 'productdb'
+      MYSQL_DATABASE: 'product-api-db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
     ports:
         - '4306:3306'
     volumes:
@@ -24,7 +26,7 @@ services:
       DB_HOST: db
       DB_USERNAME: 'root'
       DB_PASSWORD: 'root'
-      DB_NAME: 'productdb'
+      DB_NAME: 'product-api-db'
       REDIS_HOST: cache
       NODE_ENV: development
     restart: always

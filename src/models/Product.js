@@ -15,12 +15,12 @@ const Product = db.define('product', {
   slug: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true
+    unique: true // will create a index as well
   },
   sku: {
     type: DataTypes.STRING(12),
     allowNull: false,
-    unique: true
+    unique: true // will create a index as well
   },
   brand: {
     type: DataTypes.STRING(12),
