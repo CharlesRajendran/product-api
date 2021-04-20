@@ -11,7 +11,7 @@
     "test": "jest --passWithNoTests",
     "test:coverage": "jest --coverage",
     "migrate": "sequelize-cli db:migrate",
-    "rollback": "sequelize-cli db:migrate:undo",
+    "rollback:migration": "sequelize-cli db:migrate:undo",
     "migrate-and-start": "npm run migrate && npm start",
     "release": "standard-version"
   },
@@ -27,6 +27,7 @@
     "debug": "~4.3.1",
     "express": "~4.17.1",
     "express-rate-limit": "^5.2.6",
+    "express-slow-down": "^1.4.0",
     "faker": "^5.5.3",
     "helmet": "^4.5.0",
     "hpp": "^0.2.3",
