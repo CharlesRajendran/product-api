@@ -3,10 +3,10 @@ services:
   db:
     container_name: 'product_db'
     image: mysql:latest
+    command: mysqld --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_DATABASE: 'product-api-db'
-      MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'root'
     ports:
         - '4306:3306'
