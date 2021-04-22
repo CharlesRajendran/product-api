@@ -40,6 +40,7 @@ const defaultResolve = async (response, data) => {
   response.status(200).json(payload);
 
   // updateCache
+  // fires after response, so user will not be blocked to get the response while updating cache
   if (cacheKey) {
     await updateCache(cacheKey, JSON.stringify(payload));
   }

@@ -28,7 +28,7 @@ const swaggerOptions = {
       servers: ['http://localhost:3000'],
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ['./src/routes/*.js'],
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
@@ -40,9 +40,12 @@ app.use(cookieParser());
 // Security Middlewares
 // Note: not using app.use(helmet()) -> Since, some are not relevant to API's and some will reduce performance such as helmet.noCache(), helmet.dnsPrefetchControl
 
-app.use(helmet.hidePoweredBy());// Will hide `X-Powered-By: Express` header, so, we hide saying it is a express application
-app.use(helmet.xssFilter());// Will set the `X-XSS-Protection` header to 1, so, it will sanitize/encode query and body parameter, so we can remove dangerous characters injecting bad code (XSS)
+app.use(helmet.hidePoweredBy()); // Will hide `X-Powered-By: Express` header, so, we hide saying it is a express application
+
+app.use(helmet.xssFilter()); // Will set the `X-XSS-Protection` header to 0, so, it will sanitize/encode query and body parameter, so we can remove dangerous characters injecting bad code (XSS)
+
 app.use(helmet.noSniff()); // Will set the `X-Content-Type-Options` header to `no-sniff`, so, the browser will not use the content sniffing functionality, so the content-type remains as in server.
+
 app.use(helmet.hsts()); // Will force browsers to communicate to the server only through https
 
 app.use(hpp()); // http parameter pollution protector
@@ -52,19 +55,25 @@ app.use(cacheMW);
 
 // Request Rate Limit
 // Max 150 request for 15 mins for a IP
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 150,
-  message: JSON.stringify(ErrorHelper({ message: 'Too many requests!', statusCode: 429 }))
-}));
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 150,
+    message: JSON.stringify(
+      ErrorHelper({ message: 'Too many requests!', statusCode: 429 })
+    ),
+  })
+);
 
 // slow down after ratelimit passes
 // Will slowdown by 500ms with each request after 140th request
-app.use(slowDown({
-  windowMs: 15 * 60 * 1000,
-  delayAfter: 140,
-  delayMs: 500
-}));
+app.use(
+  slowDown({
+    windowMs: 15 * 60 * 1000,
+    delayAfter: 140,
+    delayMs: 500,
+  })
+);
 
 // Routes
 app.options('/*', (req, res) => {
