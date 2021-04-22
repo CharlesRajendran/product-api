@@ -9,7 +9,24 @@ const productController = require('../controllers/productsController');
 
 const { updateCache } = require('../utilities/cacheHelper');
 
-/* GET home page. */
+/**
+ * @swagger
+ * /
+ * get:
+ *  description: Fetch all the products
+ *  parameters:
+ *    - name: page
+ *      in: query
+ *      required: false
+ *      type: number
+ *    - name: limit
+ *      in: query
+ *      required: false
+ *      type: number
+ *  responses:
+ *    200:
+ *      description: Fetch list of products
+ */
 router.get('/', productController.fetchAllProducts);
 
 router.post('/', (req, res, next) => {
