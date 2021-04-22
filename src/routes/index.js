@@ -11,32 +11,33 @@ const { updateCache } = require('../utilities/cacheHelper');
 
 /**
  * @swagger
- * /
- * get:
- *  description: Fetch all the products
- *  parameters:
- *    - name: page
- *      in: query
+ * /:
+ *  get:
+ *   summary: Get all products
+ *   description: Fetch all the products from database
+ *   parameters:
+ *    - in: query
+ *      name: page
+ *      schema:
+ *       type: number
  *      required: false
- *      type: number
- *    - name: limit
- *      in: query
+ *      description: page number
+ *    - in: query
+ *      name: limit
+ *      schema:
+ *       type: number
  *      required: false
- *      type: number
- *  responses:
+ *      description: number of items per page
+ *   responses:
  *    200:
- *      description: Fetch list of products
+ *     description: Ok response with all todos
+ *    429:
+ *     description: Too many requests
+ *    500:
+ *     description: Internal server error
  */
 router.get('/', productController.fetchAllProducts);
 
-router.post('/', (req, res, next) => {
-  const { value } = req.body;
-  res.json({
-    message: value === 'Respond with a resource POST' ? 'Respond with a resource' : 'Respond with a resource POST'
-  });
-
-  // update cache
-  updateCache(req.cacheKey, value);
-});
+router.post('/', (req, res, next) => {});
 
 module.exports = router;
