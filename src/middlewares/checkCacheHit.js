@@ -8,7 +8,9 @@ module.exports = async (req, res, next) => {
     }
 
     // Construct key from key object
-    const key = encodeURIComponent(req.url);
+    const key = encodeURIComponent(
+      `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`
+    );
     req.cacheKey = key;
 
     // Inject cache key to req object for further use in setting up the cache

@@ -28,6 +28,12 @@ const { updateCache } = require('../utilities/cacheHelper');
  *       type: number
  *      required: false
  *      description: number of items per page
+ *    - in: query
+ *      name: sortBy
+ *      schema:
+ *       type: string
+ *      required: false
+ *      description: column name to sort the result
  *   responses:
  *    200:
  *     description: Ok response with all todos
