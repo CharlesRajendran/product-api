@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 const { Op } = require('sequelize');
 const Products = require('../models/Product');
+const Brands = require('../models/Brand');
 
 const fetchAllProducts = async (attributes) => {
   const {
@@ -43,7 +45,35 @@ const fetchProduct = async (attributes) => {
   };
 };
 
+const addNewProduct = async (attributes) => {
+  const {
+    name, slug, sku, brand, image, unit, unit_price
+  } = attributes;
+
+  // Create or Fetch Brand ID
+  const [brandRecord, created] = await Brands.findOrCreate({
+    where: { name: brand },
+  });
+
+  // fetch list of products
+  const newProduct = await Products.create({
+    name,
+    brand: brandRecord.id,
+    slug,
+    sku,
+    image,
+    unit,
+    unit_price,
+  });
+
+  return {
+    ...newProduct.toJSON(),
+    flushCache: true,
+  };
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
+  addNewProduct,
 };

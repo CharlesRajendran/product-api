@@ -1,5 +1,3 @@
-const ErrorHelper = require('./errorHelper');
-
 /**
  * @description Common validate function for request paramter validation against Joi schema
  * @param {Object} validateFunction Joi schema validator
@@ -13,12 +11,11 @@ module.exports.validate = async (validateFunction, attributes) => {
   });
 
   if (result.error) {
-    throw new Error(
-      ErrorHelper({
-        message: `Request validation error: ${result.error.message || ''}`,
-        statusCode: 422,
-      })
+    const Err = new Error(
+      `Request validation error: ${result.error.message || ''}`
     );
+    Err.code = 422;
+    throw Err;
   }
 
   return attributes;

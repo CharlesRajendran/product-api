@@ -84,24 +84,11 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use('/', indexRouter);
 
 // handling unmatched routes
-app.all('*', async (req, res) => {
-  res.status(404).send(
-    ErrorHelper({
-      message: `Cannot find ${req.method} endpoint for ${req.path}`,
-      statusCode: 404,
-    }).payload
-  );
-});
-
-// error handler
-app.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+app.use(
+  (req, res) => ErrorHelper({
+    message: `Cannot find ${req.method} endpoint for ${req.path}`,
+    statusCode: 404,
+  }).payload
+);
 
 module.exports = app;

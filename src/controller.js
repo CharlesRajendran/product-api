@@ -1,6 +1,6 @@
 const ErrorHelper = require('./utilities/errorHelper');
-const logger = require('./utilities/loggingHelper');
-const { updateCache } = require('./utilities/cacheHelper');
+const Logger = require('./utilities/loggingHelper');
+const { updateCache, flushCacheDb } = require('./utilities/cacheHelper');
 
 /**
  * @description Default error response for API requests
@@ -24,7 +24,7 @@ const defaultReject = async (error, response) => {
   // only 500 errors are unknow error which needs to be reported
   // other errors are handled
   if (boomError.statusCode >= 500) {
-    await logger.log('error', errorResponse);
+    await Logger.log('error', errorResponse);
   }
 };
 
@@ -36,13 +36,18 @@ const defaultReject = async (error, response) => {
  */
 const defaultResolve = async (response, data) => {
   // destructure cacheKey from response
-  const { cacheKey, ...payload } = data;
+  const { cacheKey, flushCache, ...payload } = data;
   response.status(200).json(payload);
 
   // updateCache
-  // fires after response, so user will not be blocked to get the response while updating cache
   if (cacheKey) {
     await updateCache(cacheKey, JSON.stringify(payload));
+  }
+
+  if (flushCache) {
+    // flush cache
+    const result = await flushCacheDb();
+    Logger.log('debug', `Cleared Cache: ${result.toString()}`);
   }
 };
 
@@ -57,7 +62,6 @@ const controller = async (req, res, params) => {
 
     // call the service function with validated data
     const data = await params.service(attributes, {});
-
     return resolve(res, data);
   } catch (err) {
     return reject(err, res);
