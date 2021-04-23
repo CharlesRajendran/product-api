@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
+const { validate } = require('../utilities/validationHelper');
 const {
   fetchAllProducts: fetchAllProductsSchema,
 } = require('../schema/productSchema');
-const ErrorHelper = require('../utilities/errorHelper');
 
 const fetchAllProducts = async (req) => {
   const { page, limit, sortBy } = req.query;
@@ -14,22 +15,19 @@ const fetchAllProducts = async (req) => {
     sortBy: sortBy || null,
   };
 
-  // Validate request parameters with schema
-  const result = fetchAllProductsSchema().validate(attributes);
+  return validate(fetchAllProductsSchema, attributes);
+};
 
-  console.log(attributes, result);
-  if (result.error) {
-    throw new Error(
-      ErrorHelper({
-        message: `Request validation error: ${result.error.message || ''}`,
-        statusCode: 422,
-      })
-    );
-  }
+const fetchProduct = async (req) => {
+  const attributes = {
+    cacheKey: req.cacheKey,
+    id: isNaN(req.params.id) ? req.params.id : parseInt(req.params.id, 10), // id can be ID or slug
+  };
 
-  return attributes;
+  return validate(fetchAllProductsSchema, attributes);
 };
 
 module.exports = {
   fetchAllProducts,
+  fetchProduct,
 };
