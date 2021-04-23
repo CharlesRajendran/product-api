@@ -2,7 +2,7 @@ const redis = require('redis');
 
 const redisClient = redis.createClient({
   host: process.env.REDIS_HOST,
-  port: 6379
+  port: 6379,
 });
 
 /**
@@ -27,5 +27,18 @@ module.exports.getFromCache = (key) => new Promise((resolve, reject) => {
       reject(err);
     }
     resolve(data);
+  });
+});
+
+/**
+ * @description Flush cache after updates
+ * @returns {void}
+ */
+module.exports.flushCacheDb = () => new Promise((resolve, reject) => {
+  redisClient.flushdb((err, succeeded) => {
+    if (err) {
+      reject(err);
+    }
+    resolve(succeeded);
   });
 });

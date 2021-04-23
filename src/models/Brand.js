@@ -37,7 +37,6 @@ const Brand = db.define(
     },
     email: {
       type: DataTypes.STRING(1000),
-      allowNull: false,
     },
     phone: {
       type: DataTypes.STRING(1000),

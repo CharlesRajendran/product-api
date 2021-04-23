@@ -16,7 +16,15 @@ const fetchProduct = async (req, res) => {
   });
 };
 
+const addNewProduct = async (req, res) => {
+  await controller(req, res, {
+    validator: productValidator.addNewProduct,
+    service: productService.addNewProduct,
+  });
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
+  addNewProduct,
 };

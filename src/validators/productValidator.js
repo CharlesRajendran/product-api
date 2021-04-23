@@ -1,8 +1,12 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
+const slugify = require('slugify');
 const { validate } = require('../utilities/validationHelper');
 const {
   fetchAllProducts: fetchAllProductsSchema,
+  fetchProduct: fetchProductSchema,
+  addNewProduct: addNewProductSchema,
 } = require('../schema/productSchema');
 
 const fetchAllProducts = async (req) => {
@@ -24,10 +28,32 @@ const fetchProduct = async (req) => {
     id: isNaN(req.params.id) ? req.params.id : parseInt(req.params.id, 10), // id can be ID or slug
   };
 
-  return validate(fetchAllProductsSchema, attributes);
+  return validate(fetchProductSchema, attributes);
+};
+
+const addNewProduct = async (req) => {
+  const {
+    name, brand, image, unit, unit_price
+  } = req.body;
+
+  const attributes = {
+    name,
+    slug: slugify(`${name} ${Math.floor(Math.random() * 1000)}`),
+    sku: `${name.slice(0, 2)}-${Math.floor(Math.random() * 999)}-${brand.slice(
+      0,
+      2
+    )}`,
+    brand,
+    image,
+    unit,
+    unit_price,
+  };
+
+  return validate(addNewProductSchema, attributes);
 };
 
 module.exports = {
   fetchAllProducts,
   fetchProduct,
+  addNewProduct,
 };
