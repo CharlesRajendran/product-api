@@ -7,6 +7,7 @@ const {
   fetchAllProducts: fetchAllProductsSchema,
   fetchProduct: fetchProductSchema,
   addNewProduct: addNewProductSchema,
+  updateProduct: updateProductSchema,
 } = require('../schema/productSchema');
 
 const fetchAllProducts = async (req) => {
@@ -52,8 +53,27 @@ const addNewProduct = async (req) => {
   return validate(addNewProductSchema, attributes);
 };
 
+const updateProduct = async (req) => {
+  const {
+    name, slug, sku, image, unit, unit_price
+  } = req.body;
+
+  const attributes = {
+    id: parseInt(req.params.id, 10),
+    name,
+    slug,
+    sku,
+    image,
+    unit,
+    unit_price,
+  };
+
+  return validate(updateProductSchema, attributes);
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
+  updateProduct,
 };

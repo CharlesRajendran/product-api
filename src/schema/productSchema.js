@@ -22,8 +22,22 @@ const addNewProduct = () => Joi.object().keys({
   unit_price: Joi.number().allow(null, ''),
 });
 
+const updateProduct = () => Joi.object().keys({
+  id: Joi.number().required(),
+  name: Joi.string().min(3).max(100),
+  slug: Joi.string().min(3).max(100),
+  sku: Joi.string()
+    .min(8)
+    .max(12)
+    .pattern(new RegExp(/^[a-z]{2}-[\d]{3}-[a-z]{2}$/i)),
+  image: Joi.string().allow(null, '').max(1000),
+  unit: Joi.string().allow(null, '').max(20),
+  unit_price: Joi.number().allow(null, ''),
+});
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
+  updateProduct,
 };

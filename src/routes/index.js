@@ -37,6 +37,8 @@ const productController = require('../controllers/productsController');
  *   responses:
  *    200:
  *     description: Successful Response
+ *    304:
+ *     description: Not Modified
  *    422:
  *     description: Parameter Validation Error
  *    429:
@@ -111,6 +113,8 @@ router.post('/', productController.addNewProduct);
  *   responses:
  *    200:
  *     description: Successful Response
+ *    304:
+ *     description: Not Modified
  *    422:
  *     description: Parameter Validation Error
  *    429:
@@ -119,5 +123,56 @@ router.post('/', productController.addNewProduct);
  *     description: Internal Server Error
  */
 router.get('/:id', productController.fetchProduct);
+
+/**
+ * @swagger
+ * /{id}:
+ *  patch:
+ *   summary: Update products
+ *   tags:
+ *     - Product
+ *   description: Update product information
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      schema:
+ *       type: string
+ *      required: true
+ *      description: id or slug
+ *    - in: body
+ *      name: Product
+ *      description: Payload for update product API
+ *      schema:
+ *        type: object
+ *        properties:
+ *          name:
+ *            type: string
+ *            description: Name of the product
+ *          slug:
+ *            type: string
+ *            description: Slug of the product
+ *          sku:
+ *            type: string
+ *            description: SKU of the product
+ *          image:
+ *            type: string
+ *            description: Product image URL
+ *          unit:
+ *            type: string
+ *            description: Unit of product
+ *          unit_price:
+ *            type: number
+ *            description: Price per unit of product
+ *   responses:
+ *    200:
+ *     description: Successful Response
+ *    422:
+ *     description: Parameter Validation Error
+ *    429:
+ *     description: Too Many Requests
+ *    500:
+ *     description: Internal Server Error
+ */
+router.patch('/:id', productController.updateProduct);
 
 module.exports = router;
