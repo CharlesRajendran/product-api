@@ -72,8 +72,40 @@ const addNewProduct = async (attributes) => {
   };
 };
 
+const updateProduct = async (attributes) => {
+  const { id } = attributes;
+
+  // Omit the null fields from attribute
+  const validUpdateAttributes = Object.keys(attributes)
+    .filter((key) => attributes[key] && key !== 'id')
+    .reduce(
+      (obj, validKey) => ({
+        ...obj,
+        [validKey]: attributes[validKey],
+      }),
+      {}
+    );
+
+  // Update Product
+  await Products.update(
+    { ...validUpdateAttributes },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  return {
+    id,
+    ...validUpdateAttributes,
+    flushCache: true,
+  };
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
+  updateProduct,
 };
