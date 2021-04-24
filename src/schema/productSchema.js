@@ -35,9 +35,14 @@ const updateProduct = () => Joi.object().keys({
   unit_price: Joi.number().allow(null, ''),
 });
 
+const deleteProduct = () => Joi.object().keys({
+  id: Joi.number().required(),
+});
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
+  deleteProduct,
 };

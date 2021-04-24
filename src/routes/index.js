@@ -175,4 +175,33 @@ router.get('/:id', productController.fetchProduct);
  */
 router.patch('/:id', productController.updateProduct);
 
+/**
+ * @swagger
+ * /{id}:
+ *  delete:
+ *   summary: Delete products
+ *   tags:
+ *     - Product
+ *   description: Delete product record
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      schema:
+ *       type: string
+ *      required: true
+ *      description: id
+ *   responses:
+ *    200:
+ *     description: Successful Response
+ *    404:
+ *     description: Not Found
+ *    422:
+ *     description: Parameter Validation Error
+ *    429:
+ *     description: Too Many Requests
+ *    500:
+ *     description: Internal Server Error
+ */
+router.delete('/:id', productController.deleteProduct);
+
 module.exports = router;

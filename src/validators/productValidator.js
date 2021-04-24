@@ -8,6 +8,7 @@ const {
   fetchProduct: fetchProductSchema,
   addNewProduct: addNewProductSchema,
   updateProduct: updateProductSchema,
+  deleteProduct: deleteProductSchema,
 } = require('../schema/productSchema');
 
 const fetchAllProducts = async (req) => {
@@ -71,9 +72,18 @@ const updateProduct = async (req) => {
   return validate(updateProductSchema, attributes);
 };
 
+const deleteProduct = async (req) => {
+  const attributes = {
+    id: parseInt(req.params.id, 10),
+  };
+
+  return validate(deleteProductSchema, attributes);
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
+  deleteProduct,
 };
