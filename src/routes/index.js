@@ -2,9 +2,25 @@
 /* eslint-disable no-unused-vars */
 const express = require('express');
 const multer = require('multer');
+const fs = require('fs');
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, callback) => {
+      const path = `${__dirname}/../../uploads/`;
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+      }
+
+      callback(null, path);
+    },
+    filename: (req, file, callback) => {
+      // originalname is the uploaded file's name with extn
+      callback(null, file.originalname);
+    },
+  }),
+});
 
 // Controllers
 const productController = require('../controllers/productsController');
