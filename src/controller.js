@@ -44,7 +44,13 @@ const defaultResolve = async (response, data) => {
 
   // updateCache
   if (cacheKey) {
-    await updateCache(cacheKey, JSON.stringify(payload));
+    await updateCache(
+      cacheKey,
+      JSON.stringify({
+        data: payload,
+        status: 'success',
+      })
+    );
   }
 
   if (flushCache) {

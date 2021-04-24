@@ -29,6 +29,7 @@ services:
       DB_NAME: 'product-api-db'
       REDIS_HOST: cache
       NODE_ENV: development
+      API_BASE_ENDPOINT: 'http://localhost:3000'
     restart: always
     build: .
     ports:
