@@ -39,10 +39,16 @@ const deleteProduct = () => Joi.object().keys({
   id: Joi.number().required(),
 });
 
+const csvUpload = () => Joi.object().keys({
+  fileType: Joi.string().valid('text/csv').required(),
+  products: Joi.array().items(addNewProduct()),
+});
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
   deleteProduct,
+  csvUpload,
 };

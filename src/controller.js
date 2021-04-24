@@ -37,7 +37,10 @@ const defaultReject = async (error, response) => {
 const defaultResolve = async (response, data) => {
   // destructure cacheKey from response
   const { cacheKey, flushCache, ...payload } = data;
-  response.status(200).json(payload);
+  response.status(200).json({
+    data: payload,
+    status: 'success',
+  });
 
   // updateCache
   if (cacheKey) {

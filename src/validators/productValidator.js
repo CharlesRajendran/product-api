@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
 const slugify = require('slugify');
+
 const { validate } = require('../utilities/validationHelper');
 const {
   fetchAllProducts: fetchAllProductsSchema,
@@ -9,7 +10,10 @@ const {
   addNewProduct: addNewProductSchema,
   updateProduct: updateProductSchema,
   deleteProduct: deleteProductSchema,
+  csvUpload: csvUploadSchema,
 } = require('../schema/productSchema');
+
+const { csvFileToJSON } = require('../utilities/csvHelper');
 
 const fetchAllProducts = async (req) => {
   const { page, limit, sortBy } = req.query;
@@ -41,10 +45,9 @@ const addNewProduct = async (req) => {
   const attributes = {
     name,
     slug: slugify(`${name} ${Math.floor(Math.random() * 1000)}`),
-    sku: `${name.slice(0, 2)}-${Math.floor(Math.random() * 999)}-${brand.slice(
-      0,
-      2
-    )}`,
+    sku: `${name.slice(0, 2)}-${Math.floor(
+      Math.random() * 899 + 100
+    )}-${brand.slice(0, 2)}`,
     brand,
     image,
     unit,
@@ -80,10 +83,96 @@ const deleteProduct = async (req) => {
   return validate(deleteProductSchema, attributes);
 };
 
+const csvUpload = async (req) => {
+  const productsCSV = await csvFileToJSON(req.file.path);
+
+  /**
+   * ===================== Product CSV JSON ======================
+   * "products": [
+      [
+        "name",
+        "brand",
+        "slug",
+        "unit",
+        "sku",
+        "unit_price"
+      ],
+      [
+        "Chiffon spaghetti dress long true blue",
+        "Ivy & Oak",
+        "chiffon-spaghetti-dress-long-true-blue",
+        "pcs",
+        "Ch-97-Iv",
+        "199"
+      ],
+      ......
+    ]
+   *
+   * ================ Expected JSON =============================
+   * "products": [
+      {
+        "name": "Chiffon spaghetti dress long true blue",
+        "brand": "Ivy & Oak",
+        "slug": "chiffon-spaghetti-dress-long-true-blue",
+        "unit": "pcs",
+        "sku": "Ch-97-Iv",
+        "unit_price": "199"
+      },
+      {
+        "name": "Chiffon spaghetti dress long yellow",
+        "brand": "Ivy & Oak",
+        "slug": "chiffon-spaghetti-dress-long-yellow",
+        "unit": "pcs",
+        "sku": "Ch-671-Iv",
+        "unit_price": "169"
+      },
+      ...
+    ]
+   */
+
+  // Convert CSV Array to Product JSON Array
+  let attributeIndex = {}; // Object to hold the column index of each attribute in CSV
+  const products = productsCSV.reduce((productArray, rowArray, index) => {
+    let product = {};
+    if (index === 0) {
+      // header row
+      rowArray.forEach((headerCell, headerIndex) => {
+        attributeIndex = {
+          ...attributeIndex,
+          [headerIndex]: headerCell,
+        };
+      });
+
+      return productArray;
+    }
+    // data rows
+    product = rowArray.reduce(
+      (productObj, rowCell, rowIndex) => ({
+        ...productObj,
+        [attributeIndex[rowIndex]]:
+          attributeIndex[rowIndex] === 'unit_price'
+            ? parseInt(rowCell, 10)
+            : rowCell, // unit price should be number
+      }),
+      {}
+    );
+
+    return [...productArray, product];
+  }, []);
+
+  const attributes = {
+    fileType: req.file.mimetype,
+    products,
+  };
+
+  return validate(csvUploadSchema, attributes);
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
   deleteProduct,
+  csvUpload,
 };

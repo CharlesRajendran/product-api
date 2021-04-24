@@ -1,6 +1,10 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 const { Op } = require('sequelize');
+const csv = require('csv-parse');
+
 const Products = require('../models/Product');
 const Brands = require('../models/Brand');
 
@@ -119,10 +123,34 @@ const deleteProduct = async (attributes) => {
   };
 };
 
+const csvUpload = async (attributes) => {
+  const { products } = attributes;
+
+  for (let i = 0; i < products.length; i++) {
+    // cannot use promise.all since it will create duplicate data while executing in parallel
+    const [brandRecord, created] = await Brands.findOrCreate({
+      where: { name: products[i].brand },
+    });
+
+    products[i] = {
+      ...products[i],
+      brand: brandRecord.id,
+    };
+  }
+
+  const result = await Products.bulkCreate(products);
+
+  return {
+    result,
+    flushCache: true,
+  };
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
   deleteProduct,
+  csvUpload,
 };

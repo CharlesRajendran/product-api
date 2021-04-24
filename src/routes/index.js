@@ -1,8 +1,10 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 const express = require('express');
+const multer = require('multer');
 
 const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
 
 // Controllers
 const productController = require('../controllers/productsController');
@@ -203,5 +205,34 @@ router.patch('/:id', productController.updateProduct);
  *     description: Internal Server Error
  */
 router.delete('/:id', productController.deleteProduct);
+
+/**
+ * @swagger
+ * /upload:
+ *  post:
+ *   summary: Bulk CSV Insert
+ *   tags:
+ *     - Product
+ *   description: Upload CSV File to Bulk Insert
+ *   consumes:
+ *     - multipart/form-data
+ *   parameters:
+ *     - in: formData
+ *       name: datafile
+ *       type: file
+ *       description: Upload Data CSV File
+ *   responses:
+ *    200:
+ *     description: Successful Response
+ *    404:
+ *     description: Not Found
+ *    422:
+ *     description: Parameter Validation Error
+ *    429:
+ *     description: Too Many Requests
+ *    500:
+ *     description: Internal Server Error
+ */
+router.post('/upload', upload.single('datafile'), productController.csvUpload);
 
 module.exports = router;
