@@ -30,9 +30,17 @@ const updateProduct = async (req, res) => {
   });
 };
 
+const deleteProduct = async (req, res) => {
+  await controller(req, res, {
+    validator: productValidator.deleteProduct,
+    service: productService.deleteProduct,
+  });
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
+  deleteProduct,
 };

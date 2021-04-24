@@ -88,7 +88,7 @@ const updateProduct = async (attributes) => {
 
   // Update Product
   await Products.update(
-    { ...validUpdateAttributes },
+    { ...validUpdateAttributes, updatedAt: Date.now() },
     {
       where: {
         id,
@@ -103,9 +103,26 @@ const updateProduct = async (attributes) => {
   };
 };
 
+const deleteProduct = async (attributes) => {
+  const { id } = attributes;
+
+  // Update Product
+  await Products.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return {
+    id,
+    flushCache: true,
+  };
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
+  deleteProduct,
 };
