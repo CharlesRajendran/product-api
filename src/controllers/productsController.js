@@ -37,10 +37,18 @@ const deleteProduct = async (req, res) => {
   });
 };
 
+const csvUpload = async (req, res) => {
+  await controller(req, res, {
+    validator: productValidator.csvUpload,
+    service: productService.csvUpload,
+  });
+};
+
 module.exports = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,
   updateProduct,
   deleteProduct,
+  csvUpload,
 };

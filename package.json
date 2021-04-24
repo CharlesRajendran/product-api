@@ -24,6 +24,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.2",
     "cookie-parser": "~1.4.5",
+    "csv-parse": "^4.15.4",
     "debug": "~4.3.1",
     "express": "~4.17.1",
     "express-rate-limit": "^5.2.6",
@@ -32,6 +33,7 @@
     "helmet": "^4.5.0",
     "hpp": "^0.2.3",
     "joi": "^17.4.0",
+    "multer": "^1.4.2",
     "mysql2": "^2.2.5",
     "redis": "^3.1.1",
     "sequelize": "^6.6.2",
