@@ -102,8 +102,8 @@ router.get('/', productController.fetchAllProducts);
  *             type: number
  *             description: Price per unit of product
  *   responses:
- *    200:
- *     description: Successful Response
+ *    201:
+ *     description: Resource Created
  *    422:
  *     description: Parameter Validation Error
  *    429:

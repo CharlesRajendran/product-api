@@ -6,6 +6,8 @@ const controller = require('../controller');
 const productValidator = require('../validators/productValidator');
 const productService = require('../services/productService');
 const { defaultResolve } = require('../utilities/responseHelper');
+const Logger = require('../utilities/loggingHelper');
+const { flushCacheDb } = require('../utilities/cacheHelper');
 
 const fetchAllProducts = async (req, res) => {
   await controller(req, res, {
@@ -25,6 +27,20 @@ const addNewProduct = async (req, res) => {
   await controller(req, res, {
     validator: productValidator.addNewProduct,
     service: productService.addNewProduct,
+    resolve: async (response, data) => {
+      // custom resolve to send 201 status for created resource
+      const { flushCache, ...payload } = data;
+      response.status(201).json({
+        data: payload,
+        status: 'success',
+      });
+
+      if (flushCache) {
+        // flush cache
+        const result = await flushCacheDb();
+        Logger.log('debug', `Cleared Cache: ${result.toString()}`);
+      }
+    },
   });
 };
 

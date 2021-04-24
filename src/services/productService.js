@@ -3,7 +3,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 const { Op } = require('sequelize');
-const csv = require('csv-parse');
 
 const Products = require('../models/Product');
 const Brands = require('../models/Brand');
