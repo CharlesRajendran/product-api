@@ -11,10 +11,13 @@ const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
 
+const { graphqlHTTP } = require('express-graphql');
 const cacheMW = require('./middlewares/checkCacheHit');
 
 const indexRouter = require('./routes/index');
 const ErrorHelper = require('./utilities/errorHelper');
+
+const schema = require('./graphql/index');
 
 const app = express();
 
@@ -80,6 +83,17 @@ app.options('/*', (req, res) => {
   // Return CORS headers
   res.cors().send({});
 });
+
+// GraphQL
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
+
+// REST
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use('/', indexRouter);
 

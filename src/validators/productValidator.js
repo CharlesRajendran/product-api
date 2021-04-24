@@ -86,6 +86,7 @@ const deleteProduct = async (req) => {
 const csvUpload = async (req) => {
   const productsCSV = await csvFileToJSON(req.file.path);
 
+  // Convert CSV Array to Product JSON Array
   /**
    * ===================== Product CSV JSON ======================
    * "products": [
@@ -130,12 +131,11 @@ const csvUpload = async (req) => {
     ]
    */
 
-  // Convert CSV Array to Product JSON Array
   let attributeIndex = {}; // Object to hold the column index of each attribute in CSV
   const products = productsCSV.reduce((productArray, rowArray, index) => {
     let product = {};
     if (index === 0) {
-      // header row
+      // first row - header row
       rowArray.forEach((headerCell, headerIndex) => {
         attributeIndex = {
           ...attributeIndex,
