@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
       const cachedValue = await getFromCache(req.cacheKey);
 
       if (cachedValue) {
-        // interntionally putting status code 200 over 304 for caching
+        // interntionally putting status code 200 over 204 or 304 for caching
         // since graphql client is not properly working with loading server side caching.
         // therefore for response body will be empty because of 304 (not modified)
         res.status(200).json(JSON.parse(cachedValue));
