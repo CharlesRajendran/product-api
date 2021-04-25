@@ -14,6 +14,7 @@ const {
 } = require('../schema/productSchema');
 
 const { csvFileToJSON } = require('../utilities/csvHelper');
+const ErrorHelper = require('../utilities/errorHelper');
 
 const fetchAllProducts = async (req) => {
   const { page, limit, sortBy } = req.query;
@@ -41,6 +42,13 @@ const addNewProduct = async (req) => {
   const {
     name, brand, image, unit, unit_price
   } = req.body;
+
+  if (!name || !brand) {
+    const Err = new Error('Passing falsy values for required fields');
+    Err.code = 400;
+
+    throw Err;
+  }
 
   const attributes = {
     name,

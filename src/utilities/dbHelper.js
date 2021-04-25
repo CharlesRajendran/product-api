@@ -1,7 +1,16 @@
+/* eslint-disable no-irregular-whitespace */
 const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv-flow');
+const cls = require('cls-hooked');
 
 const Logger = require('./loggingHelper');
 const ErrorHelper = require('./errorHelper');
+
+if (process.env.NODE_ENV === 'test') {
+  dotenv.config();
+  const namespace = cls.createNamespace('test-namespace');
+  Sequelize.useCLS(namespace);
+}
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -9,6 +18,7 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: 'mysql',
     logging: (message) => Logger.log('debug', message),
     pool: {
@@ -23,11 +33,15 @@ const sequelize = new Sequelize(
   try {
     await sequelize.authenticate();
     Logger.log('debug', 'Connection has been established successfully.');
-    console.log(`
-╔═╗┌─┐┌─┐  ╦═╗┬ ┬┌┐┌┌┐┌┬┌┐┌┌─┐  ╔═╗┬ ┬┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┬ ┬┬  ┬ ┬ ┬  
-╠═╣├─┘├─┘  ╠╦╝│ ││││││││││││ ┬  ╚═╗│ ││  │  ├┤ └─┐└─┐├┤ │ ││  │ └┬┘  
-╩ ╩┴  ┴    ╩╚═└─┘┘└┘┘└┘┴┘└┘└─┘  ╚═╝└─┘└─┘└─┘└─┘└─┘└─┘└  └─┘┴─┘┴─┘┴
-    `);
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(`
+███████ ███████ ██████  ██    ██ ███████ ██████      ██████  ██    ██ ███    ██ ███    ██ ██ ███    ██  ██████  
+██      ██      ██   ██ ██    ██ ██      ██   ██     ██   ██ ██    ██ ████   ██ ████   ██ ██ ████   ██ ██       
+███████ █████   ██████  ██    ██ █████   ██████      ██████  ██    ██ ██ ██  ██ ██ ██  ██ ██ ██ ██  ██ ██   ███ 
+     ██ ██      ██   ██  ██  ██  ██      ██   ██     ██   ██ ██    ██ ██  ██ ██ ██  ██ ██ ██ ██  ██ ██ ██    ██ 
+███████ ███████ ██   ██   ████   ███████ ██   ██     ██   ██  ██████  ██   ████ ██   ████ ██ ██   ████  ██████  
+      `);
+    }
   } catch (error) {
     Logger.log(
       'error',

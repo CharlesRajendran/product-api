@@ -9,7 +9,9 @@ module.exports = async (req, res, next) => {
 
     // Construct key from key object
     if (req.method === 'GET') {
-      const key = encodeURIComponent(req.headers['if-none-match']); // E-Tag
+      const key = encodeURIComponent(
+        `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`
+      );
       req.cacheKey = key;
 
       // Inject cache key to req object for further use in setting up the cache

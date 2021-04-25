@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 const express = require('express');
-const cookieParser = require('cookie-parser');
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
@@ -38,7 +37,6 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // Middlewares
 app.use(express.json());
-app.use(cookieParser());
 
 // Security Middlewares
 // Note: not using app.use(helmet()) -> Since, some are not relevant to API's and some will reduce performance such as helmet.noCache(), helmet.dnsPrefetchControl
