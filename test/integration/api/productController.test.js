@@ -1,6 +1,13 @@
+/* eslint-disable no-console */
 /* eslint-disable no-irregular-whitespace */
 const supertest = require('supertest');
+const { Sequelize } = require('sequelize');
+const Umzug = require('umzug');
+
+const path = require('path');
+
 const Products = require('../../../src/models/Product');
+const sequelize = require('../../../src/utilities/dbHelper');
 
 const expressApp = require('../../../src/app');
 
@@ -8,8 +15,20 @@ let app;
 // jest.mock('../../../src/services/productService.js');
 
 describe('#ProductAPI', () => {
-  beforeAll(() => {
-    app = supertest(expressApp);
+  const umzug = new Umzug({
+    storage: 'sequelize',
+
+    storageOptions: {
+      sequelize,
+    },
+
+    migrations: {
+      params: [sequelize.getQueryInterface(), Sequelize],
+      path: path.join(__dirname, '../../../migrations'),
+    },
+  });
+
+  beforeAll(async () => {
     console.log(`
 ██ ███    ██ ████████ ███████  ██████  ██████   █████  ████████ ██  ██████  ███    ██     ████████ ███████ ███████ ████████ ███████ 
 ██ ████   ██    ██    ██      ██       ██   ██ ██   ██    ██    ██ ██    ██ ████   ██        ██    ██      ██         ██    ██      
@@ -17,10 +36,17 @@ describe('#ProductAPI', () => {
 ██ ██  ██ ██    ██    ██      ██    ██ ██   ██ ██   ██    ██    ██ ██    ██ ██  ██ ██        ██    ██           ██    ██         ██ 
 ██ ██   ████    ██    ███████  ██████  ██   ██ ██   ██    ██    ██  ██████  ██   ████        ██    ███████ ███████    ██    ███████           
     `);
+
+    // Migrate Database
+    await umzug.up({});
+
+    // Request Object for API Testing
+    app = supertest(expressApp);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     // Rollback Database Migrations
+    await umzug.down({ to: 0 });
   });
 
   describe('##GET / -> Fetch Products', () => {
