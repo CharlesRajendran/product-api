@@ -7,6 +7,8 @@ const { Op } = require('sequelize');
 const Products = require('../models/Product');
 const Brands = require('../models/Brand');
 
+const { checkRecordExistByAttribute } = require('../utilities/queryHelper');
+
 const fetchAllProducts = async (attributes) => {
   const {
     cacheKey, page, limit, sortBy
@@ -78,6 +80,9 @@ const addNewProduct = async (attributes) => {
 const updateProduct = async (attributes) => {
   const { id } = attributes;
 
+  // check whether product with it exist
+  await checkRecordExistByAttribute(Products, { id });
+
   // Omit the null fields from attribute
   const validUpdateAttributes = Object.keys(attributes)
     .filter((key) => attributes[key] && key !== 'id')
@@ -108,6 +113,9 @@ const updateProduct = async (attributes) => {
 
 const deleteProduct = async (attributes) => {
   const { id } = attributes;
+
+  // check whether product with it exist
+  await checkRecordExistByAttribute(Products, { id });
 
   // Update Product
   await Products.destroy({
