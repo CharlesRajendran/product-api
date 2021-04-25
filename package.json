@@ -8,7 +8,7 @@
     "launch": "docker-compose up",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "jest --passWithNoTests",
+    "test": "NODE_ENV=test && npm run migrate -- --env test && jest --passWithNoTests --coverage --verbose",
     "test:coverage": "jest --coverage",
     "migrate": "sequelize-cli db:migrate",
     "rollback:migration": "sequelize-cli db:migrate:undo",
@@ -23,9 +23,10 @@
   },
   "dependencies": {
     "@hapi/boom": "^9.1.2",
-    "cookie-parser": "~1.4.5",
+    "cls-hooked": "^4.2.2",
     "csv-parse": "^4.15.4",
     "debug": "~4.3.1",
+    "dotenv-flow": "^3.2.0",
     "express": "~4.17.1",
     "express-graphql": "^0.12.0",
     "express-rate-limit": "^5.2.6",
@@ -44,12 +45,11 @@
     "swagger-jsdoc": "6.1.0",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
-    "winston-aws-cloudwatch": "^3.0.0"
+    "supertest": "^6.1.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
-    "dotenv": "^8.2.0",
     "eslint": "^7.24.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.2.0",
