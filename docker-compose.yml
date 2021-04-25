@@ -4,12 +4,12 @@ services:
     container_name: 'product_db'
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
     entrypoint:
       sh -c "
-        echo 'CREATE DATABASE IF NOT EXISTS ProductDB; GRANT ALL PRIVILEGES ON ProductDB.* TO '\''root'\''@'\''%'\''; ' > /docker-entrypoint-initdb.d/init.sql;
-        echo 'CREATE DATABASE IF NOT EXISTS ProductTestDB; GRANT ALL PRIVILEGES ON ProductTestDB.* TO '\''root'\''@'\''%'\''; ' >> /docker-entrypoint-initdb.d/init.sql;
+        echo 'CREATE DATABASE IF NOT EXISTS $DB_NAME; GRANT ALL PRIVILEGES ON $DB_NAME.* TO '\''$DB_USERNAME'\''@'\''%'\''; ' > /docker-entrypoint-initdb.d/init.sql;
+        echo 'CREATE DATABASE IF NOT EXISTS $TEST_DB_NAME; GRANT ALL PRIVILEGES ON $TEST_DB_NAME.* TO '\''$DB_USERNAME'\''@'\''%'\''; ' >> /docker-entrypoint-initdb.d/init.sql;
         /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password"
     ports:
         - '4306:3306'
@@ -27,13 +27,13 @@ services:
     image: product-list-api
     environment:
       DB_HOST: db
-      DB_USERNAME: root
-      DB_PASSWORD: root
-      DB_NAME: ProductDB
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_NAME: "${DB_NAME}"
       DB_PORT: 3306
       REDIS_HOST: cache
-      NODE_ENV: development
-      API_BASE_ENDPOINT: 'http://localhost:3000'
+      NODE_ENV: "${NODE_ENV}"
+      API_BASE_ENDPOINT: "${API_BASE_ENDPOINT}"
     restart: always
     build: .
     ports:
