@@ -20,7 +20,10 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    logging: (message) => Logger.log('debug', message),
+    logging:
+      process.env.NODE_ENV === 'test'
+        ? false
+        : (message) => Logger.log('debug', message), // test to not to show the transaction log
     pool: {
       max: 10,
       min: 0,
