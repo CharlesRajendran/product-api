@@ -4,7 +4,7 @@
 - Clone the repository and navigate to the project folder.
 - Make sure that you have installed [Docker](https://www.docker.com/) and it is running.
 - RUN `npm run launch` (it will spin up 3 containers, which are, app, redis and mysql)
-- RUN `npm test`, if all the tests are passing, then the application launched successfully.
+- RUN `npm test`, if all the tests are passing, then the application launched successfully. (RUN `npm install` so you will have jest to run the tests)
 - Visit the application running on `http://localhost:3000`.
 <br />
 
