@@ -7,21 +7,25 @@
 - RUN `npm test`, if all the tests are passing, then the application launched successfully.
 - Visit the application running on `http://localhost:3000`.
 <br />
+
 ## API Documentation and API Testing
 - Go to `http://localhost:3000/api-docs` (It will load a Swagger UI Interface with All the REST Services)
 - Go to `http://localhost:3000/graphql` (To view the GraphiQL Client and Test GraphQL Operations)
 <br />
+
 ## Running The Tests
 - There are sample unit and integration tests available to ensure the reliability of the code. 
 - To run the tests `npm test` in the terminal.
 <br />
+
 ## Issue Tracking
 - **Github Projects: https://github.com/CharlesRajendran/product-api/projects/1**
 <br />
+
 ## Basic Architecture and Application Flow
 ![Image](https://drive.google.com/uc?export=view&id=1WPPvd-GtwoqUeWaxhGjavlxcXEDWLBNB)
-
 <br />
+
 ## Folder Structure
 - **.github/** - Github Specific Folder which holds Issue Template and PR Template
 - **.bin/www** - Node server file
@@ -53,6 +57,7 @@
 - **jest.config.js** -> jest configurations
 - **package.json and package-lock.json** - to keep track of dependencies, git hooks and npm scripts.
 <br />
+
 ## Used Tools, Libraries and Technologies
 - Language: Javascript
 - Runtime Environment: Node.js
