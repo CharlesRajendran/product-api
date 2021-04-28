@@ -1,8 +1,12 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 /* eslint-disable no-irregular-whitespace */
 const supertest = require('supertest');
 const { Sequelize } = require('sequelize');
 const Umzug = require('umzug');
+
+const faker = require('faker');
+const slugify = require('slugify');
 
 const path = require('path');
 
@@ -29,13 +33,16 @@ describe('#ProductAPI', () => {
   });
 
   beforeAll(async () => {
-    console.log(`
+    console.log(
+      'debug',
+      `
 ██ ███    ██ ████████ ███████  ██████  ██████   █████  ████████ ██  ██████  ███    ██     ████████ ███████ ███████ ████████ ███████ 
 ██ ████   ██    ██    ██      ██       ██   ██ ██   ██    ██    ██ ██    ██ ████   ██        ██    ██      ██         ██    ██      
 ██ ██ ██  ██    ██    █████   ██   ███ ██████  ███████    ██    ██ ██    ██ ██ ██  ██        ██    █████   ███████    ██    ███████ 
 ██ ██  ██ ██    ██    ██      ██    ██ ██   ██ ██   ██    ██    ██ ██    ██ ██  ██ ██        ██    ██           ██    ██         ██ 
 ██ ██   ████    ██    ███████  ██████  ██   ██ ██   ██    ██    ██  ██████  ██   ████        ██    ███████ ███████    ██    ███████           
-    `);
+    `
+    );
 
     // Migrate Database
     await umzug.up({});
@@ -50,15 +57,55 @@ describe('#ProductAPI', () => {
   });
 
   describe('##GET / -> Fetch Products', () => {
+    let createdRecordIds = [];
+    beforeAll(async () => {
+      // Create sample records
+      let numberOfRecords = 50;
+      const data = [];
+      while (numberOfRecords--) {
+        const name = faker.commerce.productName() + Math.floor(Math.random() * 1000); // just to make it unique
+
+        data.push({
+          name,
+          brand: Math.floor(Math.random() * 5 + 1),
+          slug: slugify(`${name} ${Math.floor(Math.random() * 1000)}`),
+          sku: `${name.slice(0, 2)}-${Math.floor(
+            Math.random() * 899 + 100 // so number will be 100 - 999, so will meet 8 character constraint always
+          )}-${faker.company.companyName().slice(0, 3)}`,
+          image: faker.image.imageUrl(),
+          unit: 'pcs',
+          unit_price: parseInt(faker.commerce.price(), 10),
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.recent(),
+        });
+      }
+
+      try {
+        createdRecordIds = await Products.bulkCreate(data, { returning: true });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    });
+
+    afterAll(async () => {
+      // clear record
+      await Products.destroy({
+        where: {
+          id: [...createdRecordIds],
+        },
+      });
+    });
+
     it('should return array of products in the database', async () => {
       const response = await app.get('/');
       expect(response.statusCode).toBe(200);
       expect(response.body.status).toBe('success');
-      expect(response.body.data.products.length).toBe(100);
+      expect(response.body.data.products.length).toBe(70); // 20 seed + 50 test records
     });
 
     it('should support pagination and return only a subset of data when passing page and limit params', async () => {
-      const response = await app.get('/?page=10&limit=10');
+      const response = await app.get('/?page=1&limit=10');
       expect(response.statusCode).toBe(200);
       expect(response.body.status).toBe('success');
       expect(response.body.data.products.length).toBe(10);

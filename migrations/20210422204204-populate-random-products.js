@@ -5,14 +5,14 @@ const slugify = require('slugify');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    let numberOfRecords = 100;
+    let numberOfRecords = 20;
     const data = [];
     while (numberOfRecords--) {
-      const name = faker.commerce.productName();
+      const name = `${faker.commerce.productName()} ${faker.company.companyName()}`;
 
       data.push({
         name,
-        brand: Math.floor(Math.random() * 10 + 1),
+        brand: Math.floor(Math.random() * 5 + 1),
         slug: slugify(`${name} ${Math.floor(Math.random() * 1000)}`),
         sku: `${name.slice(0, 2)}-${Math.floor(
           Math.random() * 899 + 100 // so number will be 100 - 999, so will meet 8 character constraint always
