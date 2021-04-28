@@ -13,6 +13,7 @@ const Product = db.define(
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      unique: true,
     },
     slug: {
       type: DataTypes.STRING(100),
