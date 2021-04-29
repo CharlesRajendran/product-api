@@ -41,6 +41,7 @@ const deleteProduct = () => Joi.object().keys({
 
 const csvUpload = () => Joi.object().keys({
   fileType: Joi.string().valid('text/csv').required(),
+  fileSize: Joi.number().max(2000000), // 2MB
   products: Joi.array().items(addNewProduct()),
 });
 
