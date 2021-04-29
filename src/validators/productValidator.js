@@ -170,6 +170,7 @@ const csvUpload = async (req) => {
 
   const attributes = {
     fileType: req.file.mimetype,
+    fileSize: req.file.size,
     products,
   };
 
