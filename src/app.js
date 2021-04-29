@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
+const cors = require('cors');
 
 const { graphqlHTTP } = require('express-graphql');
 const cacheMW = require('./middlewares/checkCacheHit');
@@ -50,6 +51,8 @@ app.use(helmet.noSniff()); // Will set the `X-Content-Type-Options` header to `n
 app.use(helmet.hsts()); // Will force browsers to communicate to the server only through https
 
 app.use(hpp()); // http parameter pollution protector
+
+app.use(cors());
 
 // Cache Hits
 app.use(cacheMW);

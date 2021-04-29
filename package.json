@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
+    "transpile": "tsc",
     "launch": "docker-compose --verbose up -d",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
@@ -24,6 +25,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.2",
     "cls-hooked": "^4.2.2",
+    "cors": "^2.8.5",
     "csv-parse": "^4.15.4",
     "debug": "~4.3.1",
     "dotenv-flow": "^3.2.0",
@@ -51,6 +53,8 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
+    "@types/express": "^4.17.11",
+    "@types/node": "^15.0.1",
     "eslint": "^7.24.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.2.0",
@@ -63,6 +67,8 @@
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "sequelize-cli": "^6.2.0",
-    "standard-version": "^9.2.0"
+    "standard-version": "^9.2.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   }
 }
