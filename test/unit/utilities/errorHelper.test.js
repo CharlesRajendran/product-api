@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-try-expect */
 /* eslint-disable jest/no-conditional-expect */
-const ErrorHelper = require('../../../src/utilities/errorHelper');
+const ErrorHelper = require('../../../dist/src/utilities/errorHelper');
 
 describe('#ErrorUtility', () => {
   describe('##ErrorHelper', () => {

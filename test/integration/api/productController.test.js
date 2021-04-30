@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 /* eslint-disable no-irregular-whitespace */
@@ -10,10 +11,10 @@ const slugify = require('slugify');
 
 const path = require('path');
 
-const Products = require('../../../src/models/Product');
-const sequelize = require('../../../src/utilities/dbHelper');
+const Products = require('../../../dist/src/models/Product');
+const sequelize = require('../../../dist/src/utilities/dbHelper');
 
-const expressApp = require('../../../src/app');
+const expressApp = require('../../../dist/src/app');
 
 let app;
 // jest.mock('../../../src/services/productService.js');

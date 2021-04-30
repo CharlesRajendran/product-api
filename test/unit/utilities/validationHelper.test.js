@@ -1,8 +1,9 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable jest/no-try-expect */
 /* eslint-disable jest/no-conditional-expect */
 const faker = require('faker');
 const Joi = require('joi');
-const { validate } = require('../../../src/utilities/validationHelper');
+const { validate } = require('../../../dist/src/utilities/validationHelper');
 
 describe('#ValidationUtility', () => {
   describe('##Validate', () => {
@@ -22,7 +23,7 @@ describe('#ValidationUtility', () => {
         unit_price: faker.commerce.price(),
       };
 
-      const validActual = await validate(schema, validAttributes);
+      const validActual = await validate(schema(), validAttributes);
 
       expect(validActual).toEqual(validAttributes);
     });
