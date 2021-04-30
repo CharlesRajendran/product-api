@@ -1,10 +1,11 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable jest/no-try-expect */
 /* eslint-disable jest/no-conditional-expect */
 const faker = require('faker');
 const {
   addNewProduct,
   csvUpload,
-} = require('../../../src/validators/productValidator');
+} = require('../../../dist/src/validators/productValidator');
 
 describe('#ProductValidator', () => {
   describe('##AddNewProductValidator', () => {
