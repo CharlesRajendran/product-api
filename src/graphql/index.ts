@@ -18,13 +18,12 @@ const RootQuery:GraphQLObjectType = new GraphQLObjectType({
     getProducts: {
       type: new GraphQLList(ProductType),
       resolve: async () => {
-        const result: any = await got(process.env.API_BASE_ENDPOINT);
+        const result: any = await got.get(process.env.API_BASE_ENDPOINT);
 
         if (result.body) {
-          const data: any[] = result.body.data.products;
+          const data: any[] = JSON.parse(result.body).data.products;
           return data;
         }
-
         return [];
       },
     },
