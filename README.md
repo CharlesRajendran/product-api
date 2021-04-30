@@ -3,13 +3,14 @@
 ## Running the Application
 - Clone the repository and navigate to the project folder.
 - Make sure that you have installed [Docker](https://www.docker.com/) and it is running.
-- RUN `npm run launch` (it will spin up 3 containers, which are, app, redis and mysql)
+- RUN `npm run launch` (it will spin up 3 containers, which are, app, redis and mysql, wait till you see **`SERVER RUNNING`** ASCII Art)
 - RUN `npm test`, if all the tests are passing, then the application launched successfully. (RUN `npm install` so you will have jest to run the tests)
 - Visit the application running on `http://localhost:3000`.
 <br />
 
 ## API Documentation and API Testing
 - Go to `http://localhost:3000/api-docs` (It will load a Swagger UI Interface with All the REST Services)
+  - **Note: To test bulk insert with CSV use the `data.csv` file in the root directory**
 - Go to `http://localhost:3000/graphql` (To view the GraphiQL Client and Test GraphQL Operations)
 <br />
 
@@ -21,6 +22,12 @@
 ## Issue Tracking
 - **Github Projects: https://github.com/CharlesRajendran/product-api/projects/1**
 <br />
+
+### #######IMPORTANT########
+- Application was initially build with **Javascript** and then migrated most part to **Typescript**
+- *Remaining Migration **ToDOs***
+  - Custom Type Definitions for used Datastructures
+  - Test migration
 
 ## Basic Architecture and Application Flow
 ![Image](https://drive.google.com/uc?export=view&id=1WPPvd-GtwoqUeWaxhGjavlxcXEDWLBNB)
