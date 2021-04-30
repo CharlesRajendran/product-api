@@ -1,6 +1,9 @@
-const { defaultResolve, defaultReject } = require('./utilities/responseHelper');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import { Request, Response } from 'express';
+import { defaultResolve, defaultReject } from './utilities/responseHelper';
 
-const controller = async (req, res, params) => {
+const controller = async (req: Request, res: Response, params: any): Promise<any> => {
   // If there is no special responses to give, it will use the default response and reject
   const resolve = params.resolve ? params.resolve : defaultResolve;
   const reject = params.reject ? params.reject : defaultReject;
@@ -17,4 +20,4 @@ const controller = async (req, res, params) => {
   }
 };
 
-module.exports = controller;
+export = controller;

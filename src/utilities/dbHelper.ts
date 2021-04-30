@@ -1,24 +1,23 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-console */
 /* eslint-disable no-irregular-whitespace */
-const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv-flow');
-const cls = require('cls-hooked');
-
-const Logger = require('./loggingHelper');
-const ErrorHelper = require('./errorHelper');
+import { Sequelize } from 'sequelize';
+import * as dotenv from 'dotenv-flow';
+import Logger from './loggingHelper';
+import ErrorHelper from './errorHelper';
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config();
-  const namespace = cls.createNamespace('test-namespace');
-  Sequelize.useCLS(namespace);
 }
 
-const sequelize = new Sequelize(
+const sequelize: Sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USERNAME,
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: parseInt(process.env.DB_PORT, 10),
     dialect: 'mysql',
     logging:
       process.env.NODE_ENV === 'test'
@@ -28,7 +27,7 @@ const sequelize = new Sequelize(
       max: 10,
       min: 0,
     },
-  }
+  },
 );
 
 // Show DB Status
@@ -48,9 +47,9 @@ const sequelize = new Sequelize(
   } catch (error) {
     Logger.log(
       'error',
-      ErrorHelper({ message: error.message, statusCode: 500 })
+      ErrorHelper({ message: error.message, statusCode: 500 }),
     );
   }
 })();
 
-module.exports = sequelize;
+export = sequelize;

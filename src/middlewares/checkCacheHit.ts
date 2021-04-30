@@ -1,7 +1,10 @@
-const { getFromCache } = require('../utilities/cacheHelper');
-const Logger = require('../utilities/loggingHelper');
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+import { Request, Response, NextFunction } from 'express';
+import { getFromCache } from '../utilities/cacheHelper';
+import Logger from '../utilities/loggingHelper';
 
-module.exports = async (req, res, next) => {
+const cacheHit = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     if (req.method.toUpperCase() !== 'GET') {
       next();
@@ -9,13 +12,12 @@ module.exports = async (req, res, next) => {
 
     // Construct key from key object
     if (req.method === 'GET') {
-      const key = encodeURIComponent(
-        `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`
+      const key:string = encodeURIComponent(
+        `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`,
       );
-      req.cacheKey = key;
 
       // Inject cache key to req object for further use in setting up the cache
-      const cachedValue = await getFromCache(req.cacheKey);
+      const cachedValue = await getFromCache(key);
 
       if (cachedValue) {
         // interntionally putting status code 200 over 204 or 304 for caching
@@ -32,3 +34,5 @@ module.exports = async (req, res, next) => {
     next();
   }
 };
+
+export = cacheHit;

@@ -1,28 +1,32 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
-const express = require('express');
+import express, { Express, Request, Response } from 'express';
 
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express');
+import swaggerJSDoc, { Options } from 'swagger-jsdoc';
+import * as swaggerUI from 'swagger-ui-express';
 
-const helmet = require('helmet');
-const hpp = require('hpp');
-const rateLimit = require('express-rate-limit');
-const slowDown = require('express-slow-down');
-const cors = require('cors');
+import helmet from 'helmet';
+import hpp from 'hpp';
+import rateLimit from 'express-rate-limit';
+import slowDown from 'express-slow-down';
+import cors from 'cors';
 
-const { graphqlHTTP } = require('express-graphql');
-const cacheMW = require('./middlewares/checkCacheHit');
+import { graphqlHTTP } from 'express-graphql';
+import cacheMW from './middlewares/checkCacheHit';
 
-const indexRouter = require('./routes/index');
-const ErrorHelper = require('./utilities/errorHelper');
+import indexRouter from './routes/index';
 
-const schema = require('./graphql/index');
+import ErrorHelper from './utilities/errorHelper';
 
-const app = express();
+import schema from './graphql/index';
+
+const app:Express = express();
 
 // swagger documentation
-const swaggerOptions = {
+const swaggerOptions: Options = {
   definition: {
     info: {
       title: 'Products API',
@@ -31,7 +35,7 @@ const swaggerOptions = {
       servers: ['http://localhost:3000'],
     },
   },
-  apis: ['./src/routes/*.js'],
+  apis: ['./src/routes/*.ts'],
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
@@ -64,9 +68,9 @@ app.use(
     windowMs: 15 * 60 * 1000,
     max: 150,
     message: JSON.stringify(
-      ErrorHelper({ message: 'Too many requests!', statusCode: 429 })
+      ErrorHelper({ message: 'Too many requests!', statusCode: 429 }),
     ),
-  })
+  }),
 );
 
 // slow down after ratelimit passes
@@ -76,22 +80,17 @@ app.use(
     windowMs: 15 * 60 * 1000,
     delayAfter: 140,
     delayMs: 500,
-  })
+  }),
 );
 
-// Routes
-app.options('/*', (req, res) => {
-  // Return CORS headers
-  res.cors().send({});
-});
-
+/* Routes */
 // GraphQL
 app.use(
   '/graphql',
   graphqlHTTP({
     schema,
     graphiql: true,
-  })
+  }),
 );
 
 // REST
@@ -100,10 +99,10 @@ app.use('/', indexRouter);
 
 // handling unmatched routes
 app.use(
-  (req, res) => ErrorHelper({
+  (req: Request, res: Response) => ErrorHelper({
     message: `Cannot find ${req.method} endpoint for ${req.path}`,
     statusCode: 404,
-  }).payload
+  }).payload,
 );
 
-module.exports = app;
+export = app;

@@ -1,21 +1,22 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
-const { Op } = require('sequelize');
+import { Op } from 'sequelize';
+import Products from '../models/Product';
+import Brands from '../models/Brand';
+import checkRecordExistByAttribute from '../utilities/queryHelper';
 
-const Products = require('../models/Product');
-const Brands = require('../models/Brand');
-
-const { checkRecordExistByAttribute } = require('../utilities/queryHelper');
-
-const fetchAllProducts = async (attributes) => {
+const fetchAllProducts = async (attributes: any): Promise<any> => {
   const {
-    cacheKey, page, limit, sortBy
-  } = attributes;
+    cacheKey, page, limit, sortBy,
+  }: {cacheKey: string, page: number, limit: number, sortBy: string} = attributes;
 
   // prepare conditions
-  const options = {};
+  const options: any = {};
   if (limit) {
     options.offset = page ? (page - 1) * limit : 0;
     options.limit = limit;
@@ -34,7 +35,7 @@ const fetchAllProducts = async (attributes) => {
   };
 };
 
-const fetchProduct = async (attributes) => {
+const fetchProduct = async (attributes: any): Promise<any> => {
   const { cacheKey, id } = attributes;
 
   // fetch list of products
@@ -50,9 +51,9 @@ const fetchProduct = async (attributes) => {
   };
 };
 
-const addNewProduct = async (attributes) => {
+const addNewProduct = async (attributes: any): Promise<any> => {
   const {
-    name, slug, sku, brand, image, unit, unit_price
+    name, slug, sku, brand, image, unit, unit_price,
   } = attributes;
 
   // Create or Fetch Brand ID
@@ -63,7 +64,7 @@ const addNewProduct = async (attributes) => {
   // fetch list of products
   const newProduct = await Products.create({
     name,
-    brand: brandRecord.id,
+    brand: brandRecord.get('id'),
     slug,
     sku,
     image,
@@ -77,7 +78,7 @@ const addNewProduct = async (attributes) => {
   };
 };
 
-const updateProduct = async (attributes) => {
+const updateProduct = async (attributes: any): Promise<any> => {
   const { id } = attributes;
 
   // check whether product with it exist
@@ -91,7 +92,7 @@ const updateProduct = async (attributes) => {
         ...obj,
         [validKey]: attributes[validKey],
       }),
-      {}
+      {},
     );
 
   // Update Product
@@ -101,7 +102,7 @@ const updateProduct = async (attributes) => {
       where: {
         id,
       },
-    }
+    },
   );
 
   return {
@@ -111,7 +112,7 @@ const updateProduct = async (attributes) => {
   };
 };
 
-const deleteProduct = async (attributes) => {
+const deleteProduct = async (attributes: any): Promise<any> => {
   const { id } = attributes;
 
   // check whether product with it exist
@@ -130,7 +131,7 @@ const deleteProduct = async (attributes) => {
   };
 };
 
-const csvUpload = async (attributes) => {
+const csvUpload = async (attributes: any): Promise<any> => {
   const { products } = attributes;
 
   for (let i = 0; i < products.length; i++) {
@@ -141,7 +142,7 @@ const csvUpload = async (attributes) => {
 
     products[i] = {
       ...products[i],
-      brand: brandRecord.id,
+      brand: brandRecord.get('id'),
     };
   }
 
@@ -153,7 +154,7 @@ const csvUpload = async (attributes) => {
   };
 };
 
-module.exports = {
+export = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,

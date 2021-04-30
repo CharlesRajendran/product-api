@@ -1,14 +1,15 @@
-const fs = require('fs');
-const parse = require('csv-parse');
+/* eslint-disable import/prefer-default-export */
+import fs from 'fs';
+import parse from 'csv-parse';
 
 /**
  * @description Converts a CSV file to JSON
  * @param {*} filePath
  * @return {Object} array of rows
  */
-module.exports.csvFileToJSON = async (filePath) => {
+const csvFileToJSON = async (filePath: string): Promise<any> => {
   const result = await new Promise((resolve, reject) => {
-    const data = [];
+    const data: any[] = [];
     fs.createReadStream(filePath)
       .pipe(parse())
       .on('data', (csvrow) => {
@@ -23,4 +24,8 @@ module.exports.csvFileToJSON = async (filePath) => {
   });
 
   return result;
+};
+
+export {
+  csvFileToJSON,
 };

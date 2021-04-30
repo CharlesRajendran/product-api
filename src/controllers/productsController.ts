@@ -1,33 +1,34 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-restricted-syntax */
-const fs = require('fs');
-const path = require('path');
-const controller = require('../controller');
-const productValidator = require('../validators/productValidator');
-const productService = require('../services/productService');
-const { defaultResolve } = require('../utilities/responseHelper');
-const Logger = require('../utilities/loggingHelper');
-const { flushCacheDb } = require('../utilities/cacheHelper');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import fs from 'fs';
+import path from 'path';
+import { Request, Response } from 'express';
+import controller from '../controller';
+import productValidator from '../validators/productValidator';
+import productService from '../services/productService';
+import { defaultResolve } from '../utilities/responseHelper';
+import Logger from '../utilities/loggingHelper';
+import { flushCacheDb } from '../utilities/cacheHelper';
 
-const fetchAllProducts = async (req, res) => {
+const fetchAllProducts = async (req: Request, res: Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.fetchAllProducts,
     service: productService.fetchAllProducts,
   });
 };
 
-const fetchProduct = async (req, res) => {
+const fetchProduct = async (req:Request, res:Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.fetchProduct,
     service: productService.fetchProduct,
   });
 };
 
-const addNewProduct = async (req, res) => {
+const addNewProduct = async (req:Request, res:Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.addNewProduct,
     service: productService.addNewProduct,
-    resolve: async (response, data) => {
+    resolve: async (response: Response, data: any): Promise<any> => {
       // custom resolve to send 201 status for created resource
       const { flushCache, ...payload } = data;
       response.status(201).json({
@@ -44,25 +45,25 @@ const addNewProduct = async (req, res) => {
   });
 };
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (req: Request, res: Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.updateProduct,
     service: productService.updateProduct,
   });
 };
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = async (req: Request, res: Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.deleteProduct,
     service: productService.deleteProduct,
   });
 };
 
-const csvUpload = async (req, res) => {
+const csvUpload = async (req: Request, res: Response): Promise<any> => {
   await controller(req, res, {
     validator: productValidator.csvUpload,
     service: productService.csvUpload,
-    resolve: async (response, data) => {
+    resolve: async (response: Response, data: any): Promise<any> => {
       // custom resolve function since we need to delete upload file
       // Call default resolve
       defaultResolve(response, data);
@@ -75,14 +76,14 @@ const csvUpload = async (req, res) => {
           (err) => {
             if (err) reject(err);
             resolve('Deleted Successfully');
-          }
+          },
         );
       });
     },
   });
 };
 
-module.exports = {
+export = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,

@@ -1,25 +1,27 @@
-const {
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
   GraphQLList,
   GraphQLFloat,
-} = require('graphql');
+} from 'graphql';
 
-const got = require('got');
+import got from 'got';
 
-const ProductType = require('./types/Product');
+import ProductType from './types/Product';
 
-const RootQuery = new GraphQLObjectType({
+const RootQuery:GraphQLObjectType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     getProducts: {
       type: new GraphQLList(ProductType),
       resolve: async () => {
-        const result = await got(process.env.API_BASE_ENDPOINT);
+        const result: any = await got(process.env.API_BASE_ENDPOINT);
 
         if (result.body) {
-          const data = JSON.parse(result.body).data.products;
+          const data: any[] = result.body.data.products;
           return data;
         }
 
@@ -29,7 +31,7 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
-const Mutation = new GraphQLObjectType({
+const Mutation:GraphQLObjectType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     createProduct: {
@@ -43,11 +45,11 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (parent, args) => {
         const {
-          name, brand, image, unit, unit_price
+          name, brand, image, unit, unit_price,
         } = args;
 
         // API Request
-        const result = await got.post(process.env.API_BASE_ENDPOINT, {
+        const result: any = await got.post(process.env.API_BASE_ENDPOINT, {
           json: {
             name,
             brand,
@@ -58,12 +60,10 @@ const Mutation = new GraphQLObjectType({
           responseType: 'json',
         });
 
-        console.log(typeof result.body.data);
-
         return result.body.data;
       },
     },
   },
 });
 
-module.exports = new GraphQLSchema({ query: RootQuery, mutation: Mutation });
+export = new GraphQLSchema({ query: RootQuery, mutation: Mutation });
