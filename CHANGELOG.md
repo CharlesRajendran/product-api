@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/CharlesRajendran/product-api/compare/v1.1.0...v1.2.0) (2021-04-30)
+
+
+### Features
+
+* add validation for file size ([a5b9b9a](https://github.com/CharlesRajendran/product-api/commit/a5b9b9a3baa1c2c33fa718b828f8f6537375cba6))
+* typescript migration - migrate src and bin folder ([f31a8df](https://github.com/CharlesRajendran/product-api/commit/f31a8dfc262b74dbc92ec4e5163754be27d1fb13))
+* used cors middleware ([e137df8](https://github.com/CharlesRajendran/product-api/commit/e137df883d40d75bba72d6452e58e8d0ce09cf39))
+
+
+### Bug Fixes
+
+* parse issue in graphql query ([7f6ae6b](https://github.com/CharlesRajendran/product-api/commit/7f6ae6badf98f8a635e77b4276e4b239fae9fff1))
+* unique constraint added to fix issues with having duplicate names in product and brands table ([61a4669](https://github.com/CharlesRajendran/product-api/commit/61a466978ad4ae66839c389f94726f8e40488946))
+
 ## 1.1.0 (2021-04-26)
 
 
