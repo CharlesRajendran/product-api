@@ -1,6 +1,6 @@
-const { GraphQLObjectType, GraphQLInt, GraphQLString } = require('graphql');
+import { GraphQLObjectType, GraphQLInt, GraphQLString } from 'graphql';
 
-const ProductType = new GraphQLObjectType({
+const ProductType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Product',
   fields: () => ({
     id: { type: GraphQLInt },
@@ -14,4 +14,4 @@ const ProductType = new GraphQLObjectType({
   }),
 });
 
-module.exports = ProductType;
+export = ProductType;

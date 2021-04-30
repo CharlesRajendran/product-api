@@ -1,18 +1,18 @@
-const Joi = require('joi');
+import Joi, { ObjectSchema } from 'joi';
 
-const fetchAllProducts = () => Joi.object().keys({
+const fetchAllProductsSchema = (): ObjectSchema<any> => Joi.object().keys({
   cacheKey: Joi.string(),
   page: Joi.number().allow(null),
   limit: Joi.number().allow(null),
   sortBy: Joi.string().allow(null),
 });
 
-const fetchProduct = () => Joi.object().keys({
+const fetchProductSchema = (): ObjectSchema<any> => Joi.object().keys({
   cacheKey: Joi.string(),
   id: Joi.alternatives(Joi.string(), Joi.number()).required(),
 });
 
-const addNewProduct = () => Joi.object().keys({
+const addNewProductSchema = (): ObjectSchema<any> => Joi.object().keys({
   name: Joi.string().min(3).max(100).required(),
   slug: Joi.string().min(3).max(100).required(),
   sku: Joi.string().min(8).max(12).required(),
@@ -22,7 +22,7 @@ const addNewProduct = () => Joi.object().keys({
   unit_price: Joi.number().allow(null, ''),
 });
 
-const updateProduct = () => Joi.object().keys({
+const updateProductSchema = (): ObjectSchema<any> => Joi.object().keys({
   id: Joi.number().required(),
   name: Joi.string().min(3).max(100),
   slug: Joi.string().min(3).max(100),
@@ -35,21 +35,21 @@ const updateProduct = () => Joi.object().keys({
   unit_price: Joi.number().allow(null, ''),
 });
 
-const deleteProduct = () => Joi.object().keys({
+const deleteProductSchema = (): ObjectSchema<any> => Joi.object().keys({
   id: Joi.number().required(),
 });
 
-const csvUpload = () => Joi.object().keys({
+const csvUploadSchema = (): ObjectSchema<any> => Joi.object().keys({
   fileType: Joi.string().valid('text/csv').required(),
   fileSize: Joi.number().max(2000000), // 2MB
-  products: Joi.array().items(addNewProduct()),
+  products: Joi.array().items(addNewProductSchema()),
 });
 
-module.exports = {
-  fetchAllProducts,
-  fetchProduct,
-  addNewProduct,
-  updateProduct,
-  deleteProduct,
-  csvUpload,
+export {
+  fetchAllProductsSchema,
+  fetchProductSchema,
+  addNewProductSchema,
+  updateProductSchema,
+  deleteProductSchema,
+  csvUploadSchema,
 };

@@ -1,4 +1,4 @@
-const Boom = require('@hapi/boom');
+import Boom, { Output } from '@hapi/boom';
 
 /**
  * @description Wrapper method for error handling
@@ -7,7 +7,7 @@ const Boom = require('@hapi/boom');
  * @param error.statusCode HTTP Status Code of the Error
  * @returns {Object} Returns Boom Object
  */
-const ErrorHelper = (error) => {
+const ErrorHelper = (error: {message: string, statusCode: number}): Output => {
   switch (error.statusCode) {
     case 400:
       return Boom.badRequest(error.message).output;
@@ -38,4 +38,4 @@ const ErrorHelper = (error) => {
   }
 };
 
-module.exports = ErrorHelper;
+export = ErrorHelper;

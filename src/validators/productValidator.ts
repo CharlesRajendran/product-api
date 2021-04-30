@@ -1,50 +1,58 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable camelcase */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
-const slugify = require('slugify');
+import { Request } from 'express';
+import slugify from 'slugify';
+import { validate } from '../utilities/validationHelper';
+import {
+  fetchAllProductsSchema,
+  fetchProductSchema,
+  addNewProductSchema,
+  updateProductSchema,
+  deleteProductSchema,
+  csvUploadSchema,
+} from '../schema/productSchema';
+import { csvFileToJSON } from '../utilities/csvHelper';
 
-const { validate } = require('../utilities/validationHelper');
-const {
-  fetchAllProducts: fetchAllProductsSchema,
-  fetchProduct: fetchProductSchema,
-  addNewProduct: addNewProductSchema,
-  updateProduct: updateProductSchema,
-  deleteProduct: deleteProductSchema,
-  csvUpload: csvUploadSchema,
-} = require('../schema/productSchema');
-
-const { csvFileToJSON } = require('../utilities/csvHelper');
-const ErrorHelper = require('../utilities/errorHelper');
-
-const fetchAllProducts = async (req) => {
+const fetchAllProducts = async (req: Request): Promise<any> => {
   const { page, limit, sortBy } = req.query;
 
+  const cacheKey:string = encodeURIComponent(
+    `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`,
+  );
+
   const attributes = {
-    cacheKey: req.cacheKey,
-    page: page ? parseInt(page, 10) : null,
-    limit: limit ? parseInt(limit, 10) : null,
+    cacheKey,
+    page: page ? parseInt(page.toString(), 10) : null,
+    limit: limit ? parseInt(limit.toString(), 10) : null,
     sortBy: sortBy || null,
   };
 
-  return validate(fetchAllProductsSchema, attributes);
+  return validate(fetchAllProductsSchema(), attributes);
 };
 
-const fetchProduct = async (req) => {
+const fetchProduct = async (req: Request): Promise<any> => {
+  const cacheKey:string = encodeURIComponent(
+    `${req.url}-${JSON.stringify(req.query)}-${JSON.stringify(req.params)}`,
+  );
+
   const attributes = {
-    cacheKey: req.cacheKey,
-    id: isNaN(req.params.id) ? req.params.id : parseInt(req.params.id, 10), // id can be ID or slug
+    cacheKey,
+    id: Number.isNaN(req.params.id) ? req.params.id : parseInt(req.params.id, 10), // id can be ID or slug
   };
 
-  return validate(fetchProductSchema, attributes);
+  return validate(fetchProductSchema(), attributes);
 };
 
-const addNewProduct = async (req) => {
+const addNewProduct = async (req: Request): Promise<any> => {
   const {
-    name, brand, image, unit, unit_price
+    name, brand, image, unit, unit_price,
   } = req.body;
 
   if (!name || !brand) {
-    const Err = new Error('Passing falsy values for required fields');
+    const Err:any = new Error('Passing falsy values for required fields');
     Err.code = 400;
 
     throw Err;
@@ -54,7 +62,7 @@ const addNewProduct = async (req) => {
     name,
     slug: slugify(`${name} ${Math.floor(Math.random() * 1000)}`),
     sku: `${name.slice(0, 2)}-${Math.floor(
-      Math.random() * 899 + 100
+      Math.random() * 899 + 100,
     )}-${brand.slice(0, 2)}`,
     brand,
     image,
@@ -62,12 +70,12 @@ const addNewProduct = async (req) => {
     unit_price,
   };
 
-  return validate(addNewProductSchema, attributes);
+  return validate(addNewProductSchema(), attributes);
 };
 
-const updateProduct = async (req) => {
+const updateProduct = async (req: Request): Promise<any> => {
   const {
-    name, slug, sku, image, unit, unit_price
+    name, slug, sku, image, unit, unit_price,
   } = req.body;
 
   const attributes = {
@@ -80,18 +88,18 @@ const updateProduct = async (req) => {
     unit_price,
   };
 
-  return validate(updateProductSchema, attributes);
+  return validate(updateProductSchema(), attributes);
 };
 
-const deleteProduct = async (req) => {
+const deleteProduct = async (req: Request): Promise<any> => {
   const attributes = {
     id: parseInt(req.params.id, 10),
   };
 
-  return validate(deleteProductSchema, attributes);
+  return validate(deleteProductSchema(), attributes);
 };
 
-const csvUpload = async (req) => {
+const csvUpload = async (req: Request): Promise<any> => {
   const productsCSV = await csvFileToJSON(req.file.path);
 
   // Convert CSV Array to Product JSON Array
@@ -139,12 +147,12 @@ const csvUpload = async (req) => {
     ]
    */
 
-  let attributeIndex = {}; // Object to hold the column index of each attribute in CSV
-  const products = productsCSV.reduce((productArray, rowArray, index) => {
+  let attributeIndex:any = {}; // Object to hold the column index of each attribute in CSV
+  const products = productsCSV.reduce((productArray: any, rowArray: any, index: number) => {
     let product = {};
     if (index === 0) {
       // first row - header row
-      rowArray.forEach((headerCell, headerIndex) => {
+      rowArray.forEach((headerCell: any, headerIndex: number) => {
         attributeIndex = {
           ...attributeIndex,
           [headerIndex]: headerCell,
@@ -155,14 +163,14 @@ const csvUpload = async (req) => {
     }
     // data rows
     product = rowArray.reduce(
-      (productObj, rowCell, rowIndex) => ({
+      (productObj: any, rowCell: any, rowIndex: number) => ({
         ...productObj,
         [attributeIndex[rowIndex]]:
           attributeIndex[rowIndex] === 'unit_price'
             ? parseInt(rowCell, 10)
             : rowCell, // unit price should be number
       }),
-      {}
+      {},
     );
 
     return [...productArray, product];
@@ -174,10 +182,10 @@ const csvUpload = async (req) => {
     products,
   };
 
-  return validate(csvUploadSchema, attributes);
+  return validate(csvUploadSchema(), attributes);
 };
 
-module.exports = {
+export = {
   fetchAllProducts,
   fetchProduct,
   addNewProduct,

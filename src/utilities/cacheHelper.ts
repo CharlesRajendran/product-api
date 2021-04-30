@@ -1,6 +1,6 @@
-const redis = require('redis');
+import redis, { RedisClient } from 'redis';
 
-const redisClient = redis.createClient({
+const redisClient: RedisClient = redis.createClient({
   host: process.env.REDIS_HOST,
   port: 6379,
 });
@@ -12,7 +12,7 @@ const redisClient = redis.createClient({
  * @param {number} ttl expire in seconds
  * @returns void
  */
-module.exports.updateCache = (key, value, ttl = 3600) => {
+const updateCache = (key: string, value:string, ttl = 3600): void => {
   redisClient.setex(key, ttl, value);
 };
 
@@ -21,7 +21,7 @@ module.exports.updateCache = (key, value, ttl = 3600) => {
  * @param key key of the data
  * @returns {string} cached content
  */
-module.exports.getFromCache = (key) => new Promise((resolve, reject) => {
+const getFromCache = (key: string): Promise<string> => new Promise((resolve, reject) => {
   redisClient.get(key, (err, data) => {
     if (err) {
       reject(err);
@@ -34,7 +34,7 @@ module.exports.getFromCache = (key) => new Promise((resolve, reject) => {
  * @description Flush cache after updates
  * @returns {void}
  */
-module.exports.flushCacheDb = () => new Promise((resolve, reject) => {
+const flushCacheDb = (): Promise<any> => new Promise((resolve, reject) => {
   redisClient.flushdb((err, succeeded) => {
     if (err) {
       reject(err);
@@ -42,3 +42,9 @@ module.exports.flushCacheDb = () => new Promise((resolve, reject) => {
     resolve(succeeded);
   });
 });
+
+export {
+  updateCache,
+  getFromCache,
+  flushCacheDb,
+};

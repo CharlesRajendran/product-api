@@ -1,6 +1,9 @@
-const ErrorHelper = require('./errorHelper');
-const Logger = require('./loggingHelper');
-const { updateCache, flushCacheDb } = require('./cacheHelper');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import { Response } from 'express';
+import ErrorHelper from './errorHelper';
+import Logger from './loggingHelper';
+import { updateCache, flushCacheDb } from './cacheHelper';
 
 /**
  * @description Default error response for API requests
@@ -8,7 +11,7 @@ const { updateCache, flushCacheDb } = require('./cacheHelper');
  * @param {*} response - Response object
  * @returns Reject Response with Error Object
  */
-const defaultReject = async (error, response) => {
+const defaultReject = async (error: any, response: Response): Promise<any> => {
   const boomError = ErrorHelper({
     message: error.message,
     statusCode: error.code,
@@ -34,7 +37,7 @@ const defaultReject = async (error, response) => {
  * @param {Object} data - Returned Data object
  * @returns Resolved Response with Data
  */
-const defaultResolve = async (response, data) => {
+const defaultResolve = async (response: Response, data: any): Promise<any> => {
   // destructure cacheKey from response
   const { cacheKey, flushCache, ...payload } = data;
   response.status(200).json({
@@ -49,7 +52,7 @@ const defaultResolve = async (response, data) => {
       JSON.stringify({
         data: payload,
         status: 'success',
-      })
+      }),
     );
   }
 
@@ -60,7 +63,7 @@ const defaultResolve = async (response, data) => {
   }
 };
 
-module.exports = {
+export {
   defaultResolve,
   defaultReject,
 };

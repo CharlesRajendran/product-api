@@ -1,11 +1,15 @@
+/* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
-const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
+import express, { Router } from 'express';
+import multer, { Multer } from 'multer';
+import fs from 'fs';
 
-const router = express.Router();
-const upload = multer({
+// Controllers
+import productController from '../controllers/productsController';
+
+const router:Router = express.Router();
+const upload:Multer = multer({
   storage: multer.diskStorage({
     destination: (req, file, callback) => {
       const path = `${__dirname}/../../uploads/`;
@@ -21,9 +25,6 @@ const upload = multer({
     },
   }),
 });
-
-// Controllers
-const productController = require('../controllers/productsController');
 
 /**
  * @swagger
@@ -236,7 +237,7 @@ router.delete('/:id', productController.deleteProduct);
  *     - in: formData
  *       name: datafile
  *       type: file
- *       description: Upload Data CSV File
+ *       description: Upload Data CSV File (Max 2MB)
  *   responses:
  *    200:
  *     description: Successful Response
@@ -251,4 +252,4 @@ router.delete('/:id', productController.deleteProduct);
  */
 router.post('/upload', upload.single('datafile'), productController.csvUpload);
 
-module.exports = router;
+export = router;

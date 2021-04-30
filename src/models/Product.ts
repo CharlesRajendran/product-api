@@ -1,8 +1,9 @@
-const { DataTypes } = require('sequelize');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import { DataTypes, ModelCtor } from 'sequelize';
+import db from '../utilities/dbHelper';
 
-const db = require('../utilities/dbHelper');
-
-const Product = db.define(
+const Product:ModelCtor<any> = db.define(
   'product',
   {
     id: {
@@ -45,13 +46,13 @@ const Product = db.define(
       type: DataTypes.DATE,
     },
   },
-  {}
+  {},
 );
 
-Product.associate = (models) => {
-  Product.belongsTo(models.Brand, {
-    foreignKey: 'brand',
-  });
-};
+// Product.associate = (models: any) => {
+//   Product.belongsTo(models.Brand, {
+//     foreignKey: 'brand',
+//   });
+// };
 
-module.exports = Product;
+export = Product;

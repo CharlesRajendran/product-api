@@ -1,15 +1,21 @@
 #!/usr/bin/env node
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 /* eslint-disable no-console */
 /* eslint-disable no-use-before-define */
 
-const { createServer } = require('http');
-const debug = require('debug')('product-api:server');
-const app = require('../src/app');
+import { createServer, Server } from 'http';
+
+import Debug from 'debug';
+
+import app from '../src/app';
+
+const debug = Debug('product-api:server');
 
 const port = process.env.PORT || 3000;
 app.set('port', port);
 
-const server = createServer(app);
+const server:Server = createServer(app);
 
 server.listen(port);
 server.on('error', onError);
@@ -19,7 +25,7 @@ server.on('listening', onListening);
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: NodeJS.ErrnoException) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -49,7 +55,7 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
+  const bind:string = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`;
   debug(`Listening on ${bind}`);

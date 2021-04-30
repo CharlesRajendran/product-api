@@ -1,6 +1,7 @@
-const { DataTypes } = require('sequelize');
-
-const db = require('../utilities/dbHelper');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+import { DataTypes } from 'sequelize';
+import db from '../utilities/dbHelper';
 
 const Brand = db.define(
   'brand',
@@ -51,7 +52,7 @@ const Brand = db.define(
       type: DataTypes.DATE,
     },
   },
-  {}
+  {},
 );
 
-module.exports = Brand;
+export = Brand;
